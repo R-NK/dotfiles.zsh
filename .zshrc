@@ -1,20 +1,30 @@
-# 補完候補をカーソルキーで選択する
-setopt no_autolist
-autoload -U compinit; compinit
 zstyle ':completion:*:default' menu select auto
 
-alias code="/mnt/c/Users/right/AppData/Local/Programs/'Microsoft VS Code'/bin/code"
-alias gh='cd $(ghq list -p | peco)'
+#set history size
+export HISTSIZE=10000
+#save history after logout
+export SAVEHIST=10000
+#history file
+export HISTFILE=~/.zhistory
+#append into history file
+setopt INC_APPEND_HISTORY
+#save only one command if 2 common are same and consistent
+setopt HIST_IGNORE_DUPS
+#add timestamp for each entry
+setopt EXTENDED_HISTORY   
+
+alias awsmfa='bash awsmfa'
+alias gh='builtin cd $(ghq list -p | peco)'
 alias gho='gh-open $(ghq list -p | peco)'
 #peco
-function peco-pkill() {
+function peco-kill() {
     for pid in `ps aux | peco | awk '{ print $2 }'`
     do
         kill $pid
         echo "Killed ${pid}"
     done
 }
-alias pk="peco-pkil"
+alias pk="peco-kill"
 function peco-select-history() {
     BUFFER=$(\history -n -r 1 | peco --query "$LBUFFER")
     CURSOR=$#BUFFER
@@ -30,6 +40,8 @@ export PATH="$GOROOT/bin:$PATH"
 export PATH="$PATH:$GOPATH/bin"
 eval "$(starship init zsh)"
 
+eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
@@ -42,16 +54,7 @@ fi
 source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-bin-gem-node
-
 ### End of Zinit's installer chunk
-# Zinit Plugins
 zinit light zdharma/fast-syntax-highlighting
 zinit light zsh-users/zsh-autosuggestions
 zinit light b4b4r07/enhancd
