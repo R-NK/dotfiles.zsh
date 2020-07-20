@@ -6,16 +6,24 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 #history file
 export HISTFILE=~/.zhistory
+export LINES=1000
 #append into history file
 setopt INC_APPEND_HISTORY
 #save only one command if 2 common are same and consistent
 setopt HIST_IGNORE_DUPS
 #add timestamp for each entry
-setopt EXTENDED_HISTORY   
+setopt EXTENDED_HISTORY
 
+alias cat='bat --paging=never'
+alias less='bat'
+alias find='fdfind'
 alias awsmfa='bash awsmfa'
 alias gh='builtin cd $(ghq list -p | peco)'
 alias gho='gh-open $(ghq list -p | peco)'
+alias ls='exa -Fla'
+alias vim='gvim -v'
+alias copy='xsel -ib'
+alias jenkins='aws ssm start-session --target i-018189dd50d7d63cb --profile zucks-sazabi'
 #peco
 function peco-kill() {
     for pid in `ps aux | peco | awk '{ print $2 }'`
@@ -38,6 +46,7 @@ eval "$(anyenv init -)"
 
 export PATH="$GOROOT/bin:$PATH"
 export PATH="$PATH:$GOPATH/bin"
+export PATH="$PATH:$HOME/.cargo/bin"
 eval "$(starship init zsh)"
 
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
